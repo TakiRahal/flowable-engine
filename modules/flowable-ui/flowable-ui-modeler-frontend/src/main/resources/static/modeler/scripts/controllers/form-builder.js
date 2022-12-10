@@ -156,10 +156,9 @@ angular.module('flowableModeler')
                     url = FLOWABLE.APP_URL.getFormModelUrl($routeParams.modelId);
                 }
 
-                $http({method: 'GET', url: url}).
-                    success(function (response, status, headers, config) {
+                $http({method: 'GET', url: url})
+                    .then(function (response, status, headers, config) {
                         if (response.formDefinition.fields) {
-
                             for (var i = 0; i < response.formDefinition.fields.length; i++) {
                                 var field = response.formDefinition.fields[i];
                                 if (!field.params) {
@@ -167,7 +166,6 @@ angular.module('flowableModeler')
                                 }
                                 setFieldDragDropAttributes(field, 'savedField');
                             }
-
                             $scope.formElements = response.formDefinition.fields;
                         } else {
                             $scope.formElements = [];
@@ -192,8 +190,7 @@ angular.module('flowableModeler')
                             $scope.formLoaded = true;
                         }, 200);
                         
-                    }).
-                    error(function (response, status, headers, config) {
+                    }, function (response, status, headers, config) {
                         $scope.model.loading = false;
                     });
             } else {
