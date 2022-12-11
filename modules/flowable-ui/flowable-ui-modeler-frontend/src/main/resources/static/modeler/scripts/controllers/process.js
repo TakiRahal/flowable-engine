@@ -32,47 +32,47 @@ angular.module('flowableModeler')
         url = FLOWABLE.APP_URL.getModelUrl($routeParams.modelId);
       }
       
-      $http({method: 'GET', url: url}).
-        success(function(data, status, headers, config) {
-          $scope.model.process = data;
-          
-          $scope.loadVersions();
+      $http({method: 'GET', url: url})
+          .then(function(data, status, headers, config) {
+              $scope.model.process = data;
 
-          $scope.model.bpmn20DownloadUrl = $routeParams.modelHistoryId == undefined ?
-              FLOWABLE.APP_URL.getModelBpmn20ExportUrl($routeParams.modelId) :
-              FLOWABLE.APP_URL.getModelHistoryBpmn20ExportUrl($routeParams.modelId, $routeParams.modelHistoryId);
+              $scope.loadVersions();
+
+              $scope.model.bpmn20DownloadUrl = $routeParams.modelHistoryId == undefined ?
+                  FLOWABLE.APP_URL.getModelBpmn20ExportUrl($routeParams.modelId) :
+                  FLOWABLE.APP_URL.getModelHistoryBpmn20ExportUrl($routeParams.modelId, $routeParams.modelHistoryId);
 
 
-        	  $rootScope.$on('$routeChangeStart', function(event, next, current) {
-        		  jQuery('.qtip').qtip('destroy', true);
-        	  });
-        	  
-	          $timeout(function() {
-	            jQuery("#bpmnModel").attr('data-model-id', $routeParams.modelId);
-	            jQuery("#bpmnModel").attr('data-model-type', 'design');
-	            
-	            // in case we want to show a historic model, include additional attribute on the div
-	            if(!$scope.model.process.latestVersion) {
-	              jQuery("#bpmnModel").attr('data-history-id', $routeParams.modelHistoryId);
-	            }
+                  $rootScope.$on('$routeChangeStart', function(event, next, current) {
+                      jQuery('.qtip').qtip('destroy', true);
+                  });
 
-                var viewerUrl = "display/displaymodel.html?version=" + Date.now();
+                  $timeout(function() {
+                    jQuery("#bpmnModel").attr('data-model-id', $routeParams.modelId);
+                    jQuery("#bpmnModel").attr('data-model-type', 'design');
 
-                // If Flowable has been deployed inside an AMD environment Raphael will fail to register
-                // itself globally until displaymodel.js (which depends ona global Raphale variable) is running,
-                // therefore remove AMD's define method until we have loaded in Raphael and displaymodel.js
-                // and assume/hope its not used during.
-                var amdDefine = window.define;
-                window.define = undefined;
-                ResourceService.loadFromHtml(viewerUrl, function(){
-                    // Restore AMD's define method again
-                    window.define = amdDefine;
-                });
-              });
+                    // in case we want to show a historic model, include additional attribute on the div
+                    if(!$scope.model.process.latestVersion) {
+                      jQuery("#bpmnModel").attr('data-history-id', $routeParams.modelHistoryId);
+                    }
 
-        }).error(function(data, status, headers, config) {
-          $scope.returnToList();
-        });
+                    var viewerUrl = "display/displaymodel.html?version=" + Date.now();
+
+                    // If Flowable has been deployed inside an AMD environment Raphael will fail to register
+                    // itself globally until displaymodel.js (which depends ona global Raphale variable) is running,
+                    // therefore remove AMD's define method until we have loaded in Raphael and displaymodel.js
+                    // and assume/hope its not used during.
+                    var amdDefine = window.define;
+                    window.define = undefined;
+                    ResourceService.loadFromHtml(viewerUrl, function(){
+                        // Restore AMD's define method again
+                        window.define = amdDefine;
+                    });
+                  });
+
+            }, function(data, status, headers, config) {
+              $scope.returnToList();
+            });
     };
     
     $scope.useAsNewVersion = function() {
@@ -88,17 +88,17 @@ angular.module('flowableModeler')
         includeLatestVersion: !$scope.model.process.latestVersion  
       };
       
-      $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params}).
-      success(function(data, status, headers, config) {
-        if ($scope.model.process.latestVersion) {
-          if (!data.data) {
-            data.data = [];
-          }
-          data.data.unshift($scope.model.process);
-        }
-        
-        $scope.model.versions = data;
-      });
+      $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params})
+          .then(function(data, status, headers, config) {
+            if ($scope.model.process.latestVersion) {
+              if (!data.data.data) {
+                data.data.data = [];
+              }
+              data.data.data.unshift($scope.model.process);
+            }
+
+            $scope.model.versions = data.data;
+          });
     };
     
     $scope.showVersion = function(version) {

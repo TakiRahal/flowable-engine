@@ -33,7 +33,10 @@ var flowableModeler = angular.module('flowableModeler', [
     'duScroll',
     'dndLists',
     'ngHandsontable',
-    'ui.bootstrap', 'ui.select', 'formio', 'ngFormBuilder', 'ngJsonExplorer'
+    'ui.bootstrap', 'ui.select',
+    'formio',
+    'ngFormBuilder',
+    'ngJsonExplorer'
 ]);
 
 var flowableModule = flowableModeler;

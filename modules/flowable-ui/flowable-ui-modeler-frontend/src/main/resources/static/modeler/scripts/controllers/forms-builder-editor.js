@@ -13,7 +13,7 @@
 'use strict';
 
 angular.module('flowableModeler')
-    .run(["$rootScope", 'formioComponents', '$timeout',
+    .run(['$rootScope', 'formioComponents', '$timeout',
         function($rootScope, formioComponents, $timeout) {
 
             $rootScope.displaysFormsBuilder = [{
@@ -24,153 +24,7 @@ angular.module('flowableModeler')
                 title: 'Wizard'
             }];
             $rootScope.contentFormsBuilder = {
-                components: [{
-                    input: true,
-                    tableView: true,
-                    inputType: 'text',
-                    inputMask: '',
-                    label: 'First Name',
-                    key: 'firstName',
-                    placeholder: 'Enter your first name',
-                    prefix: '',
-                    suffix: '',
-                    multiple: false,
-                    defaultValue: '',
-                    protected: false,
-                    unique: false,
-                    persistent: true,
-                    validate: {
-                        required: false,
-                        minLength: '',
-                        maxLength: '',
-                        pattern: '',
-                        custom: '',
-                        customPrivate: false
-                    },
-                    conditional: {
-                        show: false,
-                        when: null,
-                        eq: ''
-                    },
-                    type: 'textfield'
-                }, {
-                    input: true,
-                    tableView: true,
-                    inputType: 'text',
-                    inputMask: '',
-                    label: 'Last Name',
-                    key: 'lastName',
-                    placeholder: 'Enter your last name',
-                    prefix: '',
-                    suffix: '',
-                    multiple: false,
-                    defaultValue: '',
-                    protected: false,
-                    unique: false,
-                    persistent: true,
-                    validate: {
-                        required: false,
-                        minLength: '',
-                        maxLength: '',
-                        pattern: '',
-                        custom: '',
-                        customPrivate: false
-                    },
-                    conditional: {
-                        show: false,
-                        when: null,
-                        eq: ''
-                    },
-                    type: 'textfield'
-                }, {
-                    type: 'select',
-                    validate: {
-                        required: false
-                    },
-                    clearOnHide: true,
-                    persistent: true,
-                    unique: false,
-                    protected: false,
-                    multiple: true,
-                    template: '<span>{{ item.label }}</span>',
-                    authenticate: false,
-                    filter: '',
-                    refreshOn: '',
-                    defaultValue: '',
-                    valueProperty: '',
-                    dataSrc: 'values',
-                    data: {
-                        custom: '',
-                        resource: '',
-                        url: '',
-                        json: '',
-                        values: [
-                            {
-                                label: 'Raindrops on roses',
-                                value: 'raindropsOnRoses'
-                            },
-                            {
-                                label: 'Whiskers on Kittens',
-                                value: 'whiskersOnKittens'
-                            },
-                            {
-                                label: 'Bright copper kettles',
-                                value: 'brightCopperKettles'
-                            },
-                            {
-                                label: 'Warm woolen Mittens',
-                                value: 'warmWoolenMittens'
-                            },
-                            [
-
-                            ]
-                        ]
-                    },
-                    placeholder: 'Select a few',
-                    key: 'favoriteThings',
-                    label: 'Favorite Things',
-                    tableView: true,
-                    input: true
-                }, {
-                    input: true,
-                    tableView: true,
-                    label: 'Message',
-                    key: 'message',
-                    placeholder: 'What do you think?',
-                    prefix: '',
-                    suffix: '',
-                    rows: 3,
-                    multiple: false,
-                    defaultValue: '',
-                    protected: false,
-                    persistent: true,
-                    validate: {
-                        required: false,
-                        minLength: '',
-                        maxLength: '',
-                        pattern: '',
-                        custom: ''
-                    },
-                    type: 'textarea',
-                    conditional: {
-                        show: false,
-                        when: null,
-                        eq: ''
-                    }
-                }, {
-                    type: 'button',
-                    theme: 'primary',
-                    disableOnInvalid: true,
-                    action: 'submit',
-                    block: false,
-                    rightIcon: '',
-                    leftIcon: '',
-                    size: 'md',
-                    key: 'submit',
-                    tableView: false,
-                    label: 'Submit',
-                    input: true
-                }],
+                components: [],
                 display: 'form'
             };
 
@@ -213,7 +67,7 @@ angular.module('flowableModeler')
             console.log('$rootScope.contentFormsBuilder ', $rootScope.contentFormsBuilder);
 
             // Main page (needed for visual indicator of current page)
-            $rootScope.setMainPageById('forms');
+            $rootScope.setMainPageById('list-forms-builder');
 
             // Needs to be on root scope to be available in the toolbar controller
             $rootScope.formBuilder = {activeTab: 'design'};
@@ -354,6 +208,11 @@ angular.module('flowableModeler')
 
                 $http({method: 'GET', url: url})
                     .then(function (response, status, headers, config) {
+
+                        if (response.data.formDefinition.formsBuilder) {
+                            $rootScope.contentFormsBuilder = JSON.parse(response.data.formDefinition.formsBuilder);
+                        }
+
                         if (response.data.formDefinition.fields) {
 
                             for (var i = 0; i < response.data.formDefinition.fields.length; i++) {
@@ -387,7 +246,6 @@ angular.module('flowableModeler')
                             // after next digest cycle, to prevent first false-positive
                             $scope.formLoaded = true;
                         }, 200);
-                        
                     }, function (response, status, headers, config) {
                         $scope.model.loading = false;
                     });
@@ -511,10 +369,6 @@ angular.module('flowableModeler')
             if ($rootScope.editorHistory && $rootScope.editorHistory.length > 0) {
                 $scope.stepId = $rootScope.editorHistory[0].stepId;
                 $scope.allSteps = $rootScope.editorHistory[0].allSteps;
-            }
-
-            $scope.checkData = function () {
-                console.log('$rootScope.contentFormsBuilder ', $rootScope.contentFormsBuilder)
             }
 
         }]);

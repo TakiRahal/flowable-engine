@@ -78,10 +78,10 @@ angular.module('flowableModeler')
 
 		  $http({method: 'GET', url: FLOWABLE.APP_URL.getModelsUrl(), params: params})
               .then(function(data, status, headers, config) {
-	    		$scope.model.processes = data;
+	    		$scope.model.processes = data.data;
 	    		$scope.model.loading = false;
               }, function(data, status, headers, config) {
-                  console.log('Something went wrong: ' + data);
+                  console.log('Something went wrong: ', data.data);
                   $scope.model.loading = false;
               });
 	  };
@@ -173,10 +173,10 @@ angular.module('flowableModeler')
 
                 $scope.model.loading = false;
                 $rootScope.editorHistory = [];
-                $location.path("/editor/" + data.id);
+                $location.path("/editor/" + data.data.id);
             }, function(data, status, headers, config) {
                 $scope.model.loading = false;
-                $scope.model.errorMessage = data.message;
+                $scope.model.errorMessage = data.data.message;
             });
     };
 
@@ -225,10 +225,10 @@ angular.module('flowableModeler')
 
                 $scope.model.loading = false;
                 $rootScope.editorHistory = [];
-                $location.path("/editor/" + data.id);
+                $location.path("/editor/" + data.data.id);
             }, function(data, status, headers, config) {
                 $scope.model.loading = false;
-                $scope.model.errorMessage = data.message;
+                $scope.model.errorMessage = data.data.message;
             });
     };
 

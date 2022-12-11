@@ -16,7 +16,7 @@ angular.module('flowableModeler')
   .controller('FormsBuilderCtrl', ['$rootScope', '$scope', '$translate', '$http', '$timeout','$location', '$modal', function ($rootScope, $scope, $translate, $http, $timeout, $location, $modal) {
 
       // Main page (needed for visual indicator of current page)
-      $rootScope.setMainPageById('forms');
+      $rootScope.setMainPageById('list_forms_builder');
       $rootScope.formItems = undefined;
 
       // get latest thumbnails

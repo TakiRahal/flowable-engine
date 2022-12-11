@@ -32,9 +32,9 @@ angular.module('flowableModeler')
         url = FLOWABLE.APP_URL.getModelUrl($routeParams.modelId);
       }
       
-      $http({method: 'GET', url: url}).
-        success(function(data, status, headers, config) {
-          $scope.model.caseModel = data;
+      $http({method: 'GET', url: url})
+          .then(function(data, status, headers, config) {
+          $scope.model.caseModel = data.data;
           
           $scope.loadVersions();
 
@@ -68,8 +68,8 @@ angular.module('flowableModeler')
             });
           });
 
-        }).error(function(data, status, headers, config) {
-          $scope.returnToList();
+        }, function(data, status, headers, config) {
+            $scope.returnToList();
         });
     };
     
@@ -86,17 +86,17 @@ angular.module('flowableModeler')
         includeLatestVersion: !$scope.model.caseModel.latestVersion  
       };
       
-      $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params}).
-      success(function(data, status, headers, config) {
-        if ($scope.model.caseModel.latestVersion) {
-          if (!data.data) {
-            data.data = [];
-          }
-          data.data.unshift($scope.model.caseModel);
-        }
-        
-        $scope.model.versions = data;
-      });
+      $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params})
+          .then(function(data, status, headers, config) {
+            if ($scope.model.caseModel.latestVersion) {
+              if (!data.data.data) {
+                data.data.data = [];
+              }
+              data.data.data.unshift($scope.model.caseModel);
+            }
+
+            $scope.model.versions = data.data;
+          });
     };
     
     $scope.showVersion = function(version) {
