@@ -3280,3 +3280,9 @@ ul#strength > li:last-child {
   height:auto;
 }
 
+.content-form-builder{
+    margin-top: 50px;
+}
+.content-form-builder .dropzone{
+    text-align: start;
+}

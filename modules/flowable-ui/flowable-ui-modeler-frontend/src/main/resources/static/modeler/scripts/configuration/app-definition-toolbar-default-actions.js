@@ -97,9 +97,10 @@ angular.module('flowableModeler').controller('SaveAppDefinitionCtrl',
             data.force = true;
         }
 
+        console.log('data ', data);
         delete $scope.conflict;
-        $http({method: 'PUT', url: FLOWABLE.APP_URL.getAppDefinitionUrl($rootScope.currentAppDefinition.id), data: data}).
-            success(function(response, status, headers, config) {
+        $http({method: 'PUT', url: FLOWABLE.APP_URL.getAppDefinitionUrl($rootScope.currentAppDefinition.id), data: data})
+            .then(function(response, status, headers, config) {
                 // Regular error
                 if (response.error) {
                     $scope.status.loading = false;
@@ -112,8 +113,7 @@ angular.module('flowableModeler').controller('SaveAppDefinitionCtrl',
                     }
                 }
 
-            }).
-            error(function(data, status, headers, config) {
+            }, function(data, status, headers, config) {
                 $scope.status.loading = false;
                 $scope.saveDialog.errorMessage = data.message;
             });

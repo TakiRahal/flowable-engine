@@ -156,31 +156,31 @@ angular.module('flowableModeler')
                     url = FLOWABLE.APP_URL.getFormModelUrl($routeParams.modelId);
                 }
 
-                $http({method: 'GET', url: url}).
-                    success(function (response, status, headers, config) {
-                        if (response.formDefinition.fields) {
+                $http({method: 'GET', url: url})
+                    .then(function (response, status, headers, config) {
+                        if (response.data.formDefinition.fields) {
 
-                            for (var i = 0; i < response.formDefinition.fields.length; i++) {
-                                var field = response.formDefinition.fields[i];
+                            for (var i = 0; i < response.data.formDefinition.fields.length; i++) {
+                                var field = response.data.formDefinition.fields[i];
                                 if (!field.params) {
                                     field.params = {};
                                 }
                                 setFieldDragDropAttributes(field, 'savedField');
                             }
 
-                            $scope.formElements = response.formDefinition.fields;
+                            $scope.formElements = response.data.formDefinition.fields;
                         } else {
                             $scope.formElements = [];
                         }
-                        if (response.formDefinition.outcomes) {
-                            $rootScope.currentOutcomes = response.formDefinition.outcomes;
+                        if (response.data.formDefinition.outcomes) {
+                            $rootScope.currentOutcomes = response.data.formDefinition.outcomes;
                             if ($rootScope.currentOutcomes.length > 0) {
                                 $scope.model.useOutcomes = true;
                             }
                         } else {
                             $rootScope.currentOutcomes = [];
                         }
-                        $rootScope.currentForm = response;
+                        $rootScope.currentForm = response.data;
                         delete $rootScope.currentForm.formDefinition;
 
                         $rootScope.formItems = $scope.formElements;
@@ -192,8 +192,7 @@ angular.module('flowableModeler')
                             $scope.formLoaded = true;
                         }, 200);
                         
-                    }).
-                    error(function (response, status, headers, config) {
+                    }, function (response, status, headers, config) {
                         $scope.model.loading = false;
                     });
             } else {

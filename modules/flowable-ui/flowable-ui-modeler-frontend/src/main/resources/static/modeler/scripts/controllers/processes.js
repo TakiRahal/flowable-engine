@@ -76,15 +76,14 @@ angular.module('flowableModeler')
 		    params.filterText = $scope.model.filterText;
 		  }
 
-		  $http({method: 'GET', url: FLOWABLE.APP_URL.getModelsUrl(), params: params}).
-		  	success(function(data, status, headers, config) {
+		  $http({method: 'GET', url: FLOWABLE.APP_URL.getModelsUrl(), params: params})
+              .then(function(data, status, headers, config) {
 	    		$scope.model.processes = data;
 	    		$scope.model.loading = false;
-	        }).
-	        error(function(data, status, headers, config) {
-	           console.log('Something went wrong: ' + data);
-	           $scope.model.loading = false;
-	        });
+              }, function(data, status, headers, config) {
+                  console.log('Something went wrong: ' + data);
+                  $scope.model.loading = false;
+              });
 	  };
 
 	  var timeoutFilter = function() {
@@ -168,15 +167,14 @@ angular.module('flowableModeler')
 
         $scope.model.loading = true;
 
-        $http({method: 'POST', url: FLOWABLE.APP_URL.getModelsUrl(), data: $scope.model.process}).
-            success(function(data) {
+        $http({method: 'POST', url: FLOWABLE.APP_URL.getModelsUrl(), data: $scope.model.process})
+            .then(function(data) {
                 $scope.$hide();
 
                 $scope.model.loading = false;
                 $rootScope.editorHistory = [];
                 $location.path("/editor/" + data.id);
-            }).
-            error(function(data, status, headers, config) {
+            }, function(data, status, headers, config) {
                 $scope.model.loading = false;
                 $scope.model.errorMessage = data.message;
             });
@@ -221,15 +219,14 @@ angular.module('flowableModeler')
 
         $scope.model.loading = true;
 
-        $http({method: 'POST', url: FLOWABLE.APP_URL.getCloneModelsUrl($scope.model.process.id), data: $scope.model.process}).
-            success(function(data) {
+        $http({method: 'POST', url: FLOWABLE.APP_URL.getCloneModelsUrl($scope.model.process.id), data: $scope.model.process})
+            .then(function(data) {
                 $scope.$hide();
 
                 $scope.model.loading = false;
                 $rootScope.editorHistory = [];
                 $location.path("/editor/" + data.id);
-            }).
-            error(function(data, status, headers, config) {
+            }, function(data, status, headers, config) {
                 $scope.model.loading = false;
                 $scope.model.errorMessage = data.message;
             });

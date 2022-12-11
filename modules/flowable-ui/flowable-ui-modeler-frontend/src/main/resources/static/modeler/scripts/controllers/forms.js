@@ -76,14 +76,13 @@ angular.module('flowableModeler')
 		    params.filterText = $scope.model.filterText;
 		  }
 
-		  $http({method: 'GET', url: FLOWABLE.APP_URL.getModelsUrl(), params: params}).
-		  	success(function(data, status, headers, config) {
-	    		$scope.model.forms = data;
+		  $http({method: 'GET', url: FLOWABLE.APP_URL.getModelsUrl(), params: params})
+			  .then(function(data, status, headers, config) {
+	    		$scope.model.forms = data.data;
 	    		$scope.model.loading = false;
-	        }).
-	        error(function(data, status, headers, config) {
-	           $scope.model.loading = false;
-	        });
+			  }, function(data, status, headers, config) {
+				  $scope.model.loading = false;
+			  });
 	  };
 
 	  var timeoutFilter = function() {
@@ -164,21 +163,20 @@ angular.module('flowableModeler')
 
         $scope.model.loading = true;
 
-        $http({method: 'POST', url: FLOWABLE.APP_URL.getModelsUrl(), data: $scope.model.form}).
-            success(function(data, status, headers, config) {
+        $http({method: 'POST', url: FLOWABLE.APP_URL.getModelsUrl(), data: $scope.model.form})
+			.then(function(data, status, headers, config) {
                 $scope.$hide();
                 $scope.model.loading = false;
 
                 if ($scope.createFormCallback) {
-                	$scope.createFormCallback(data);
+                	$scope.createFormCallback(data.data);
                 	$scope.createFormCallback = undefined;
                 }
 
-            }).
-            error(function(data, status, headers, config) {
-                $scope.model.loading = false;
-                $scope.model.errorMessage = data.message;
-            });
+            }, function(data, status, headers, config) {
+				$scope.model.loading = false;
+				$scope.model.errorMessage = data.message;
+			});
     };
 
     $scope.cancel = function () {
@@ -222,20 +220,19 @@ angular.module('flowableModeler')
 
 				$scope.model.loading = true;
 
-				$http({method: 'POST', url: FLOWABLE.APP_URL.getCloneModelsUrl($scope.model.form.id), data: $scope.model.form}).
-					success(function(data, status, headers, config) {
+				$http({method: 'POST', url: FLOWABLE.APP_URL.getCloneModelsUrl($scope.model.form.id), data: $scope.model.form})
+					.then(function(data, status, headers, config) {
 						$scope.$hide();
 						$scope.model.loading = false;
 
 						if ($scope.duplicateFormCallback) {
-							$scope.duplicateFormCallback(data);
+							$scope.duplicateFormCallback(data.data);
 							$scope.duplicateFormCallback = undefined;
 						}
 
-					}).
-					error(function(data, status, headers, config) {
+					}, function(data, status, headers, config) {
 						$scope.model.loading = false;
-						 $scope.model.errorMessage = data.message;
+						$scope.model.errorMessage = data.message;
 					});
 			};
 

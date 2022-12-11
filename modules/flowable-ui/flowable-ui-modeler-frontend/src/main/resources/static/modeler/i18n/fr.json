@@ -5,7 +5,8 @@
             "PROCESSES": "Processus",
             "CASEMODELS": "Modèle de cas",
             "FORMS": "Formulaires",
-            "DECISION-TABLES": "Tables de décision",
+            "FORMS_BUILDER": "Forms Builder",
+            "DECISIONS": "Tables de décision",
             "APPS": "Apps"
         },
         "TITLE": {

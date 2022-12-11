@@ -170,6 +170,7 @@ angular.module('flowableModeler')
             $scope.saveDialog.errorMessage = errorMessage.message;
         };
 
+        console.log('Ctrl data ', data);
         FormBuilderService.saveForm(data, $scope.saveDialog.name, $scope.saveDialog.formKey, 
         	$scope.saveDialog.description, saveCallback, errorCallback);
     };

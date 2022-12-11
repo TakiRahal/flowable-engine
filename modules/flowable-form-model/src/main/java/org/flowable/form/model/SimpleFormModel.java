@@ -38,6 +38,7 @@ public class SimpleFormModel implements FormModel {
     protected List<FormField> fields;
     protected List<FormOutcome> outcomes;
     protected String outcomeVariableName;
+    protected String formsBuilder;
     
     public String getName() {
         return name;
@@ -69,6 +70,14 @@ public class SimpleFormModel implements FormModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFormsBuilder() {
+        return formsBuilder;
+    }
+
+    public void setFormsBuilder(String formsBuilder) {
+        this.formsBuilder = formsBuilder;
     }
 
     /**

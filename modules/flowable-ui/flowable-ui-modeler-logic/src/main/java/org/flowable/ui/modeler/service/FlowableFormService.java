@@ -96,6 +96,7 @@ public class FlowableFormService {
         String editorJson = null;
         try {
             editorJson = objectMapper.writeValueAsString(saveRepresentation.getFormRepresentation().getFormDefinition());
+            LOGGER.info("editorJson:  {} ", editorJson);
         } catch (Exception e) {
             LOGGER.error("Error while processing form json", e);
             throw new InternalServerErrorException("Form could not be saved " + formId);

@@ -60,7 +60,8 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
             	name: name,
             	key: formKey,
             	fields: removePrivateFields(angular.copy($rootScope.formItems)), 
-            	outcomes: $rootScope.currentOutcomes
+            	outcomes: $rootScope.currentOutcomes,
+                formsBuilder: JSON.stringify($rootScope.contentFormsBuilder)
             };
 
             html2canvas(jQuery('#canvasSection'), {
@@ -73,14 +74,14 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                     ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 300, canvas.height / scale);
                     data.formImageBase64 = extra_canvas.toDataURL("image/png");
 
-                    $http({method: 'PUT', url: FLOWABLE.APP_URL.getFormModelUrl($rootScope.currentForm.id), data: data}).
-                        success(function (response, status, headers, config) {
 
+                    console.log('Service data ', data);
+                    $http({method: 'PUT', url: FLOWABLE.APP_URL.getFormModelUrl($rootScope.currentForm.id), data: data})
+                        .then(function (response, status, headers, config) {
                             if (saveCallback) {
                                 saveCallback();
                             }
-                        }).
-                        error(function (response, status, headers, config) {
+                        }, function (response, status, headers, config) {
                             if (errorCallback) {
                                 errorCallback(response);
                             }
@@ -199,8 +200,8 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
 
         var _updateFormCache = function (stepId, formId) {
             if (stepId && formId) {
-                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelUrl(formId)}).
-                    success(function(response) {
+                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelUrl(formId)})
+                    .then(function(response) {
                         if (response) {
                             var outcomes;
                             var formFields;
@@ -240,14 +241,12 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                 }
                 formIdParams += 'version=' + Date.now();
 
-                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelValuesUrl(formIdParams)}).
-                    success(function (data) {
+                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelValuesUrl(formIdParams)})
+                    .then(function (data) {
                         if (callback) {
                             callback(data);
                         }
-                    }).
-
-                    error(function (data) {
+                    }, function (data) {
                         console.log('Something went wrong when fetching form values:' + JSON.stringify(data));
                     });
             }

@@ -34,13 +34,13 @@ angular.module('flowableModeler')
         url = FLOWABLE.APP_URL.getModelUrl($routeParams.modelId);
       }
 
-      $http({method: 'GET', url: url}).
-        success(function(data, status, headers, config) {
-          $scope.model.form = data;
+      $http({method: 'GET', url: url})
+          .then(function(data, status, headers, config) {
+          $scope.model.form = data.data;
           $scope.loadVersions();
 
-        }).error(function(data, status, headers, config) {
-          $scope.returnToList();
+        }, function(data, status, headers, config) {
+              $scope.returnToList();
         });
     };
 
@@ -57,16 +57,15 @@ angular.module('flowableModeler')
         includeLatestVersion: !$scope.model.form.latestVersion
       };
 
-      $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params}).
-	      success(function(data, status, headers, config) {
+      $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params})
+          .then(function(data, status, headers, config) {
 	        if ($scope.model.form.latestVersion) {
-	          if (!data.data) {
-	            data.data = [];
+	          if (!data.data.data) {
+	            data.data.data = [];
 	          }
-	          data.data.unshift($scope.model.form);
+	          data.data.data.unshift($scope.model.form);
 	        }
-
-	        $scope.model.versions = data;
+	        $scope.model.versions = data.data;
 	      });
     };
 

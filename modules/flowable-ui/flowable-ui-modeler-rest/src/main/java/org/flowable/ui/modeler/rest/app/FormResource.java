@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.flowable.ui.modeler.model.FormSaveRepresentation;
 import org.flowable.ui.modeler.model.form.FormRepresentation;
 import org.flowable.ui.modeler.service.FlowableFormService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rest/form-models")
 public class FormResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FormResource.class);
 
     @Autowired
     protected FlowableFormService formService;
@@ -55,6 +59,7 @@ public class FormResource {
 
     @PutMapping(value = "/{formId}", produces = "application/json")
     public FormRepresentation saveForm(@PathVariable String formId, @RequestBody FormSaveRepresentation saveRepresentation) {
+        LOGGER.info("components: {} ", saveRepresentation.getFormRepresentation().getFormDefinition().getFormsBuilder());
         return formService.saveForm(formId, saveRepresentation);
     }
 }

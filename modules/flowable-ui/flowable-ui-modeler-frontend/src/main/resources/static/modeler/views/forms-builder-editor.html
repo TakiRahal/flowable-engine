@@ -1,0 +1,48 @@
+<div class="subheader editor-toolbar" id="editor-header">
+    <div class="fixed-container">
+        <div class="btn-group">
+            <div class="btn-toolbar pull-left" ng-controller="FormToolbarController" ng-cloak>
+                <button id="{{item.id}}"
+                        title="{{item.title | translate}}"
+                        ng-repeat="item in items"
+                        ng-switch on="item.type"
+                        class="btn btn-inverse" ng-class="{'separator': item.type == 'separator'}"
+                        ng-disabled="item.type == 'separator' || item.enabled == false"
+                        ng-click="toolbarButtonClicked($index)">
+
+                    <i ng-switch-when="button" ng-class="item.cssClass" class="toolbar-button" data-toggle="tooltip"
+                       title="{{item.title | translate}}"></i>
+
+                    <div ng-switch-when="separator" ng-class="item.cssClass"></div>
+                </button>
+            </div>
+        </div>
+        <div class="btn-group pull-right" ng-show="!secondaryItems.length">
+            <div class="btn-toolbar pull-right" ng-controller="FormToolbarController">
+                <button title="{{item.title | translate}}" ng-repeat="item in secondaryItems track by $index"
+                        ng-switch on="item.type" class="btn btn-inverse"
+                        ng-class="{'separator': item.type == 'separator'}"
+                        ng-disabled="item.type == 'separator'" ng-click="toolbarSecondaryButtonClicked($index)"
+                        id="{{item.id}}">
+                    <i ng-switch-when="button" ng-class="item.cssClass" class="toolbar-button" data-toggle="tooltip"
+                       title="{{item.title | translate}}"></i>
+
+                    <div ng-switch-when="separator" ng-class="item.cssClass"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div  class="container-fluid content-form-builder"  id="canvasSection">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3 class="text-center text-muted">
+                <select class="form-control form-type-select" ng-model="contentFormsBuilder.display" ng-options="display.name as display.title for display in displaysFormsBuilder"></select>
+            </h3>
+            <div class="well">
+                <form-builder form="contentFormsBuilder"></form-builder>
+            </div>
+        </div>
+    </div>
+</div>
+<button ng-click="checkData()">contentFormsBuilder</button>

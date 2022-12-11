@@ -40,18 +40,18 @@ angular.module('flowableModeler')
               url = FLOWABLE.APP_URL.getFormModelUrl($routeParams.modelId);
           }
 
-          $http({method: 'GET', url: url}).
-              success(function (response, status, headers, config) {
-                  if (response.formDefinition.fields) {
-                      for (var i = 0; i < response.formDefinition.fields.length; i++) {
-                          var field = response.formDefinition.fields[i];
+          $http({method: 'GET', url: url})
+              .then(function (data, status, headers, config) {
+                  if (data.data.formDefinition.fields) {
+                      for (var i = 0; i < data.data.formDefinition.fields.length; i++) {
+                          var field = data.data.formDefinition.fields[i];
                           if (!field.params) {
                               field.params = {};
                           }
                           setFieldDragDropAttributes(field, 'savedField');
                       }
 
-                      $scope.formElements = response.formDefinition.fields;
+                      $scope.formElements = data.data.formDefinition.fields;
                   } else {
                       $scope.formElements = [];
                   }
@@ -63,8 +63,7 @@ angular.module('flowableModeler')
                       // after next digest cycle, to prevent first false-positive
                       $scope.formLoaded = true;
                   }, 200);
-              }).
-              error(function (response, status, headers, config) {
+              }, function (response, status, headers, config) {
                   $scope.model.loading = false;
               });
           

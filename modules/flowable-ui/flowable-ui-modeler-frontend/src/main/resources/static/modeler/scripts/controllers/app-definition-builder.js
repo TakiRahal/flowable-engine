@@ -40,8 +40,8 @@ angular.module('flowableModeler')
     ];
     
     $scope.loadApp = function() {
-    	$http({method: 'GET', url: FLOWABLE.APP_URL.getAppDefinitionUrl($routeParams.modelId)}).
-        	success(function(data, status, headers, config) {
+    	$http({method: 'GET', url: FLOWABLE.APP_URL.getAppDefinitionUrl($routeParams.modelId)})
+            .then(function(data, status, headers, config) {
         	    $rootScope.currentAppDefinition = data;
         	    if (!$rootScope.currentAppDefinition.definition.theme) {
         	        $rootScope.currentAppDefinition.definition.theme = 'theme-1';
@@ -50,9 +50,9 @@ angular.module('flowableModeler')
                     $rootScope.currentAppDefinition.definition.icon = 'glyphicon-asterisk';
                 }
 
-        	}).error(function(data, status, headers, config) {
-        		console.log("Error loading model");
-        	});
+        	}, function(data, status, headers, config) {
+                console.log("Error loading model");
+            });
     };
 
     // Cleanup app definition on rootscope when scope is destroyed

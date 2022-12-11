@@ -13,26 +13,27 @@
 'use strict';
 
 var flowableModeler = angular.module('flowableModeler', [
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ngRoute',
-  'ngDragDrop',
-  'mgcrea.ngStrap',
-  'mgcrea.ngStrap.helpers.dimensions', // Needed for tooltips
-  'ui.grid',
-  'ui.grid.edit',
-  'ui.grid.selection',
-  'ui.grid.autoResize',
-  'ui.grid.moveColumns',
-  'ui.grid.cellNav',
-  'ngAnimate',
-  'pascalprecht.translate',
-  'ngFileUpload',
-  'angularSpectrumColorpicker',
-  'duScroll',
-  'dndLists',
-  'ngHandsontable'
+    'ngCookies',
+    'ngResource',
+    'ngSanitize',
+    'ngRoute',
+    'ngDragDrop',
+    'mgcrea.ngStrap',
+    'mgcrea.ngStrap.helpers.dimensions', // Needed for tooltips
+    'ui.grid',
+    'ui.grid.edit',
+    'ui.grid.selection',
+    'ui.grid.autoResize',
+    'ui.grid.moveColumns',
+    'ui.grid.cellNav',
+    // 'ngAnimate',
+    'pascalprecht.translate',
+    'ngFileUpload',
+    'angularSpectrumColorpicker',
+    'duScroll',
+    'dndLists',
+    'ngHandsontable',
+    'ui.bootstrap', 'ui.select', 'formio', 'ngFormBuilder', 'ngJsonExplorer'
 ]);
 
 var flowableModule = flowableModeler;
@@ -79,6 +80,10 @@ flowableModeler
         .when('/forms/:modelId/history/:modelHistoryId', {
             templateUrl: 'views/form.html',
             controller: 'FormCtrl'
+        })
+        .when('/list-forms-builder', {
+            templateUrl: 'views/forms-builder.html',
+            controller: 'FormsBuilderCtrl'
         })
         .when('/decisions', {
             templateUrl: 'views/decisions.html',
@@ -127,7 +132,12 @@ flowableModeler
         })
         .when('/form-editor/:modelId', {
             templateUrl: 'views/form-builder.html',
-            controller: 'FormBuilderController'
+            controller: 'FormBuilderController',
+            // resolve: 'libs/angular-drag-and-drop-lists_1.2.0/angular-drag-and-drop-lists.js'
+        })
+        .when('/forms-builder-editor/:modelId', {
+            templateUrl: 'views/forms-builder-editor.html',
+            controller: 'FormsBuilderEditorController',
         })
         .when('/case-editor/:modelId', {
             templateUrl: 'editor-app/editor.html',
@@ -235,6 +245,11 @@ flowableModeler
                     'id': 'forms',
                     'title': 'GENERAL.NAVIGATION.FORMS',
                     'path': '/forms'
+                },
+                {
+                    'id': 'list_forms_builder',
+                    'title': 'GENERAL.NAVIGATION.FORMS_BUILDER',
+                    'path': '/list-forms-builder'
                 },
                 {
                     'id': 'decisions',
@@ -350,8 +365,8 @@ flowableModeler
             };
 
             $http.get(FLOWABLE.APP_URL.getAccountUrl())
-	        	.success(function (data, status, headers, config) {
-	              	$rootScope.account = data;
+	        	.then(function (data, status, headers, config) {
+	              	$rootScope.account = data.data;
 	               	$rootScope.invalidCredentials = false;
 	 				$rootScope.authenticated = true;
 	          	});
@@ -372,6 +387,7 @@ flowableModeler
             $rootScope.backToLanding = function() {
                 $window.location.href = FLOWABLE.CONFIG.contextRoot;
             };
+
         }])
 
     // Moment-JS date-formatting filter
@@ -387,3 +403,4 @@ flowableModeler
             return '';
         };
     });
+angular.lowercase = text => text.toLowerCase();
